@@ -43,6 +43,11 @@ public class ChannelController {
 		}
 	}
 	
+	/**
+	 * É¾³ıÆµµÀ
+	 * @param id
+	 * @return
+	 */
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteChannel(@PathVariable String id){
 		System.out.println("ÕıÔÚÉ¾³ı£¬id="+id);
