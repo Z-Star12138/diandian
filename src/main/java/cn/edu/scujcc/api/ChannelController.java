@@ -24,6 +24,10 @@ public class ChannelController {
 	
 	
 	@GetMapping
+	/**获取所有
+	 * 
+	 * @return
+	 */
 	public List<Channel> getAllChannels(){
 		return service.getAllChannels();
 	}
