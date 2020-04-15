@@ -65,8 +65,8 @@ public class Channel {
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		result = prime * result + ((url == null) ? 0 : url.hashCode());
 		return result;
+		
 	}
-	
 	
 	public boolean equals(Object obj) {
 		if (this == obj)
