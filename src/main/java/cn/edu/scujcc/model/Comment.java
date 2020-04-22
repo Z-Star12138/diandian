@@ -22,12 +22,12 @@ public class Comment {
 	/**
 	 * 评论日期时间
 	 */
-	private LocalDateTime dt;
+	private LocalDateTime dt = LocalDateTime.now();
 	
 	/**
 	 * 评论点赞数量
 	 */
-	private int star;
+	private int star = 5;
 
 	public String getAuthor() {
 		return author;
