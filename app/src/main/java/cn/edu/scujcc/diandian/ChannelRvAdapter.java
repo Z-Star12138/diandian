@@ -39,7 +39,6 @@ public class ChannelRvAdapter extends RecyclerView.Adapter<ChannelRvAdapter.Chan
         return holder;
     }
 
-
     /**
      * 确定列表有一共有几行(即多少个ChannelRowHolder对象)
      *
@@ -47,11 +46,8 @@ public class ChannelRvAdapter extends RecyclerView.Adapter<ChannelRvAdapter.Chan
      */
     @Override
     public int getItemCount() {
-//        //TODO   此处暂时硬编码为10行
-//        return 30;
         return lab.getSize();
     }
-
 
     /**
      * 用于确定每一行内容是什么，即填充行中各个视图内容
@@ -101,6 +97,7 @@ public class ChannelRvAdapter extends RecyclerView.Adapter<ChannelRvAdapter.Chan
             this.title.setText(c.getTitle());
             this.quality.setText(c.getQuality());
             //获得上下文
+            Log.d("DianDian", c.getTitle() + "：准备从网络加载封面：" + c.getCover());
             Glide.with(context)
                     .load(c.getCover())
                     .placeholder(R.drawable.c1)
