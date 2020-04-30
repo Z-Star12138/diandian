@@ -34,6 +34,7 @@ public class PlayActivity extends AppCompatActivity {
     private Button sendButton;
     private Channel currentChannel;
     private List<Comment> hostComment;
+    private ChannelLab lab = ChannelLab.getInstance();
     private final Handler handler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -56,8 +57,6 @@ public class PlayActivity extends AppCompatActivity {
             }
         }
     };
-    private ChannelLab lab = ChannelLab.getInstance();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,15 +151,6 @@ public class PlayActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (tvPlayerView != null) {
-            tvPlayerView.onPause();
-        }
-        clean();
-    }
-
     /**
      * 重构，初始化播放器
      */
@@ -169,7 +159,7 @@ public class PlayActivity extends AppCompatActivity {
         player = ExoPlayerFactory.newSimpleInstance(this);
         player.setPlayWhenReady(true);
         //从界面查找视图
-        PlayerView playerView = findViewById(R.id.tv_play);
+        PlayerView playerView = findViewById(R.id.tv_player);
         //绑定界面与播放器
         playerView.setPlayer(player);
         //准备播放源

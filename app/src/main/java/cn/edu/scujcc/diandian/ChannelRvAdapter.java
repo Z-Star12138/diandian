@@ -57,7 +57,7 @@ public class ChannelRvAdapter extends RecyclerView.Adapter<ChannelRvAdapter.Chan
      */
     @Override
     public void onBindViewHolder(@NonNull ChannelRowHolder holder, int position) {
-        Log.d("DD", "position=" + position);
+        Log.d("DianDian", "position=" + position);
         Channel c = lab.getChannel(position);
         holder.bind(c);
     }
@@ -83,7 +83,6 @@ public class ChannelRvAdapter extends RecyclerView.Adapter<ChannelRvAdapter.Chan
             row.setOnClickListener((v) -> {
                 int position = getLayoutPosition();
                 Log.d("DianDian", position + "被点击了！");
-                //TODO 调用实际的跳转代码
                 listener.onChannelClick(position);
             });
         }
@@ -96,11 +95,11 @@ public class ChannelRvAdapter extends RecyclerView.Adapter<ChannelRvAdapter.Chan
         public void bind(Channel c) {
             this.title.setText(c.getTitle());
             this.quality.setText(c.getQuality());
-            //获得上下文
+            //使用网络加载图片
             Log.d("DianDian", c.getTitle() + "：准备从网络加载封面：" + c.getCover());
             Glide.with(context)
                     .load(c.getCover())
-                    .placeholder(R.drawable.c1)
+//                    .placeholder(R.drawable.c1)
                     .into(this.cover);
 //            this.cover.setImageResource(c.getCover());
         }
