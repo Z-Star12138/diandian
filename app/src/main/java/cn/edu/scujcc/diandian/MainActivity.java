@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, PlayActivity.class);
             //通过位置p得到当前频道channel，传递用户选中的频道到下一个界面
             Channel c = lab.getChannel(p);
-            intent.putExtra("Channel", c);
+            intent.putExtra("channel", c);
             startActivity(intent);
         });
 

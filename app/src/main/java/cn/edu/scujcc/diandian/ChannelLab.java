@@ -18,6 +18,11 @@ import retrofit2.Retrofit;
  */
 
 public class ChannelLab {
+    public final static int MSG_HOT_COMMENT = 2;
+    public final static int MSG_ADD_COMMENT = 3;
+    public final static int MSG_NET_FAILURE = 4;
+    //用常量代替编码内容
+    private final static String TAG = "DianDian";
     //单例第1步
     private static ChannelLab INSTANCE;
     private List<Channel> data;
@@ -69,17 +74,17 @@ public class ChannelLab {
                                    Response<List<Channel>> response) {
                 //如果访问成功
                 if (null != response && null != response.body()) {
-                    Log.d("DianDian", "Succeed,从阿里云获取的数据是：");
-                    Log.d("DianDian", response.body().toString());
+                    Log.d(TAG, "Succeed,从阿里云获取的数据是：");
+                    Log.d(TAG, response.body().toString());
                     data = response.body();
                     //不能在此操作RecyLerView刷新页面，只能使用线程通讯数据传递到主线程
                     Message msg = new Message();
                     msg.what = 1;
                     handler.sendMessage(msg);
                 } else {
-                    Log.w("DianDian", "response没有数据");
+                    Log.w(TAG, "response没有数据");
                     Message msg = new Message();
-                    msg.what = 4;
+                    msg.what = MSG_NET_FAILURE;
                     handler.sendMessage(msg);
                 }
             }
@@ -87,8 +92,10 @@ public class ChannelLab {
             @Override
             public void onFailure(Call<List<Channel>> call, Throwable t) {
                 //如果访问失败了
-                Log.e("DianDian", "访问网络失败了。。。", t);
-
+                Log.e(TAG, "访问网络失败了。。。", t);
+                Message msg = new Message();
+                msg.what = MSG_NET_FAILURE;
+                handler.sendMessage(msg);
             }
         });
     }
@@ -101,20 +108,20 @@ public class ChannelLab {
         call.enqueue(new Callback<List<Comment>>() {
             @Override
             public void onResponse(Call<List<Comment>> call, Response<List<Comment>> response) {
-                Log.d("DianDian", "Succeed,从阿里云获取的数据是：");
-                Log.d("DianDian", response.body().toString());
+                Log.d(TAG, "获取的热门频道是：");
+                Log.d(TAG, response.body().toString());
                 //发通知
                 Message msg = new Message();
-                msg.what = 2; //自己规定2，代表从阿里云获取频道。
+                msg.what = MSG_HOT_COMMENT; //自己规定2，代表从阿里云获取频道。
                 msg.obj = response.body();
                 handler.sendMessage(msg);
             }
 
             @Override
             public void onFailure(Call<List<Comment>> call, Throwable t) {
-                Log.e("DianDian", "访问网络失败了。。。", t);
+                Log.e(TAG, "访问网络失败了。。。", t);
                 Message msg = new Message();
-                msg.what = 4;
+                msg.what = MSG_NET_FAILURE;
                 handler.sendMessage(msg);
             }
         });
@@ -131,10 +138,10 @@ public class ChannelLab {
         call.enqueue(new Callback<Channel>() {
             @Override
             public void onResponse(Call<Channel> call, Response<Channel> response) {
-                Log.d("DianDian", "Succeed!!!从阿里云获取的数据是：");
-                Log.d("DianDian", response.body().toString());
+                Log.d(TAG, "添加评论后获取的数据是：");
+                Log.d(TAG, response.body().toString());
                 Message msg = new Message();
-                msg.what = 3;
+                msg.what = MSG_ADD_COMMENT;
                 handler.sendMessage(msg);
             }
 
@@ -142,7 +149,7 @@ public class ChannelLab {
             public void onFailure(Call<Channel> call, Throwable t) {
                 Log.e("DianDian", "访问网络失败！", t);
                 Message msg = new Message();
-                msg.what = 4;
+                msg.what = MSG_NET_FAILURE;
                 handler.sendMessage(msg);
             }
         });

@@ -30,4 +30,14 @@ public interface ChannelAPI {
      */
     @POST("/channel/{channelId}/comment")
     Call<Channel> addComment(@Path("channelId") String ChannelId, @Body Comment c);
+
+    /**
+     * 登陆
+     *
+     * @param username 用户名
+     * @param password 密码
+     * @return
+     */
+    @GET("/user/login/{username}/{password}")
+    Call<Integer> login(@Path("username") String username, @Path("password") String password);
 }

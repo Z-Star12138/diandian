@@ -45,7 +45,7 @@ public class PlayActivity extends AppCompatActivity {
                     updateUI();
                     break;
                 case 3:
-                    //评论成功了，提示用户
+                    //评论成功了，提示用户，
                     Toast.makeText(PlayActivity.this, "感谢留言！",
                             Toast.LENGTH_LONG).show();
                     break;
