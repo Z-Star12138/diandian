@@ -27,7 +27,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     };
     private TextInputLayout username, password;
-    private Button loginButton;
+    private Button loginButton, registerButton;
     private UserLab lab = UserLab.getInstance();
 
     private void loginSuccess() {
@@ -52,6 +52,12 @@ public class LoginActivity extends AppCompatActivity {
             String p = password.getEditText().getText().toString();
 
             lab.login(u, p, handler);
+        });
+
+        registerButton = findViewById(R.id.register_button);
+        registerButton.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivity(intent);
         });
     }
 }
