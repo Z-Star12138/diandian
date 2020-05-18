@@ -35,7 +35,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/r_password"
+        android:id="@+id/r_password1"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
         app:endIconMode="password_toggle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/r_password"
+        app:layout_constraintTop_toBottomOf="@+id/r_password1"
         app:startIconDrawable="@drawable/login_password">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -107,7 +107,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/r_gender"
+        android:id="@+id/gender"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="82dp"
@@ -118,13 +118,13 @@
         app:layout_constraintTop_toBottomOf="@+id/r_phone" />
 
     <RadioGroup
-        android:id="@+id/radioGroup"
+        android:id="@+id/r_gender"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:orientation="horizontal"
-        app:layout_constraintStart_toEndOf="@+id/r_gender"
+        app:layout_constraintStart_toEndOf="@+id/gender"
         app:layout_constraintTop_toBottomOf="@+id/r_phone">
 
         <RadioButton
@@ -159,12 +159,13 @@
         app:endIconMode="custom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroup"
+        app:layout_constraintTop_toBottomOf="@+id/r_gender"
         app:startIconDrawable="@drawable/ic_account_circle_black_24dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:enabled="false"
             android:imeOptions="actionDone"
             android:inputType="date"
             android:singleLine="true" />
@@ -172,7 +173,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/register_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="160dp"

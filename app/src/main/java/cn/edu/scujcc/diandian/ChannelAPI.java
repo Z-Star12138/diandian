@@ -40,4 +40,5 @@ public interface ChannelAPI {
      */
     @GET("/user/login/{username}/{password}")
     Call<Integer> login(@Path("username") String username, @Path("password") String password);
+
 }
