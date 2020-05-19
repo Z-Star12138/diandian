@@ -25,6 +25,7 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Random;
 
 public class PlayActivity extends AppCompatActivity {
     private SimpleExoPlayer player;
@@ -35,6 +36,7 @@ public class PlayActivity extends AppCompatActivity {
     private Channel currentChannel;
     private List<Comment> hostComment;
     private ChannelLab lab = ChannelLab.getInstance();
+    private MyPreference prefs = MyPreference.getInstance();
     private final Handler handler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -72,7 +74,10 @@ public class PlayActivity extends AppCompatActivity {
                 EditText t = findViewById(R.id.message);
                 Comment c = new Comment();
                 c.setAuthor("MyApp");
-                c.setStar(6);
+                //改进，随机点赞数（100）
+                Random random = new Random();
+                c.setStar(random.nextInt(100));
+//                c.setStar(6);
                 c.setContent(t.getText().toString());//用户在界面中所输入的评论
                 lab.addComment(currentChannel.getId(), c, handler);
             });
@@ -88,6 +93,10 @@ public class PlayActivity extends AppCompatActivity {
         tvQuality = findViewById(R.id.tv_quality);
         tvName.setText(currentChannel.getTitle());
         tvQuality.setText(currentChannel.getQuality());
+
+        //读取当前用户
+        TextView currentUser = findViewById(R.id.current_user);
+        currentUser.setText(prefs.currentUser());
 
         if (hostComment != null && hostComment.size() > 0) {
             Comment c1 = hostComment.get(0);

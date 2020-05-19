@@ -32,9 +32,12 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputLayout username, password;
     private Button loginButton, registerButton;
     private UserLab lab = UserLab.getInstance();
+    private MyPreference prefs = MyPreference.getInstance();
 
     private void loginSuccess() {
         Toast.makeText(LoginActivity.this, "登录成功！欢迎！", Toast.LENGTH_LONG).show();
+        //FIXME  用Star来替换，从服务器获取成功的用户名
+        prefs.saveUser("Star");
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
     }
@@ -51,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        prefs.setup(getApplicationContext());
 
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);

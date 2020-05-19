@@ -15,6 +15,7 @@ public class UserLab {
     public final static int USER_PASSWORD_FAIL = 0;
     public final static int USER_REGISTER_SUCCESS = 2;
     public final static int USER_REGISTER_FAIL = -2;
+    public final static String USER_CURRENT = "USER_CURRENT";
     private final static String TAG = "DianDian";
     //单例
     private static UserLab INSTANCE = null;
