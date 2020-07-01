@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -19,15 +20,26 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView channelRV;
     private ChannelRvAdapter rvAdapter;
     private ChannelLab lab = ChannelLab.getInstance();
+    private final static String TAG = "DianDian";
     //线程通讯第1步，在主线程创建Handler
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
-            if (msg.what == 1) {
-                rvAdapter.notifyDataSetChanged();
+            switch (msg.what) {
+                case ChannelLab.MSG_CHANNEL:
+                    rvAdapter.notifyDataSetChanged();
+                    break;
+                case ChannelLab.MSG_NET_FAILURE:
+                    failed();
+                    break;
             }
         }
     };
+
+    private void failed() {
+        Toast.makeText(MainActivity.this, "token无效，禁止访问", Toast.LENGTH_LONG).show();
+        Log.w(TAG, "禁止访问，因为token无效");
+    }
 
 
     @Override
@@ -49,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
 
         this.channelRV.setAdapter(rvAdapter);
         this.channelRV.setLayoutManager(new LinearLayoutManager(this));//从上往下布局
-//        initDate();
     }
 
     @Override

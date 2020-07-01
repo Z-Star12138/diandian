@@ -18,13 +18,14 @@ import retrofit2.Retrofit;
  */
 
 public class ChannelLab {
+    public final static int MSG_CHANNEL = 1;
     public final static int MSG_HOT_COMMENT = 2;
     public final static int MSG_ADD_COMMENT = 3;
     public final static int MSG_NET_FAILURE = 4;
     //用常量代替编码内容
     private final static String TAG = "DianDian";
     //单例第1步
-    private static ChannelLab INSTANCE;
+    private static ChannelLab INSTANCE = null;
     private List<Channel> data;
 
     //单例第2步
@@ -66,65 +67,74 @@ public class ChannelLab {
         Retrofit retrofit = RetrofitClient.get();
 
         ChannelAPI api = retrofit.create(ChannelAPI.class);
-        Call<List<Channel>> call = api.getAllChannels();
+        Call<Result<List<Channel>>> call = api.getAllChannels();
         //enqueue把代码放在子线程中运行
-        call.enqueue(new Callback<List<Channel>>() {
+        call.enqueue(new Callback<Result<List<Channel>>>() {
             @Override
-            public void onResponse(Call<List<Channel>> call,
-                                   Response<List<Channel>> response) {
+            public void onResponse(Call<Result<List<Channel>>> call,
+                                   Response<Result<List<Channel>>> response) {
                 //如果访问成功
-                if (null != response && null != response.body()) {
-                    Log.d(TAG, "Succeed,从阿里云获取的数据是：");
-                    Log.d(TAG, response.body().toString());
-                    data = response.body();
-                    //不能在此操作RecyLerView刷新页面，只能使用线程通讯数据传递到主线程
-                    Message msg = new Message();
-                    msg.what = 1;
-                    handler.sendMessage(msg);
-                } else {
-                    Log.w(TAG, "response没有数据");
+                if (response.code() == 403) {//说明缺少token 或者token错误
                     Message msg = new Message();
                     msg.what = MSG_NET_FAILURE;
                     handler.sendMessage(msg);
+                } else if (null != response && null != response.body()) {
+                    Log.d(TAG, "Succeed,从阿里云获取的数据是：");
+                    Log.d(TAG, response.body().toString());
+                    Result<List<Channel>> result = response.body();
+                    data = result.getData();
+                    //不能在此操作RecyLerView刷新页面，只能使用线程通讯数据传递到主线程
+                    Message msg = new Message();
+                    msg.what = MSG_CHANNEL;
+                    handler.sendMessage(msg);
+                } else {
+                    Log.w(TAG, "response没有数据");
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Channel>> call, Throwable t) {
+            public void onFailure(Call<Result<List<Channel>>> call, Throwable t) {
                 //如果访问失败了
                 Log.e(TAG, "访问网络失败了。。。", t);
-                Message msg = new Message();
-                msg.what = MSG_NET_FAILURE;
-                handler.sendMessage(msg);
             }
         });
     }
 
-    public void getHotComment(String channelId, Handler handler) {
+    public List<Comment> getHotComment(String channelId, Handler handler) {
+        List<Comment> result = null;
         //调用单例
         Retrofit retrofit = RetrofitClient.get();
         ChannelAPI api = retrofit.create(ChannelAPI.class);
-        Call<List<Comment>> call = api.getHotComments(channelId);
-        call.enqueue(new Callback<List<Comment>>() {
+        Call<Result<List<Comment>>> call = api.getHotComments(channelId);
+        call.enqueue(new Callback<Result<List<Comment>>>() {
             @Override
-            public void onResponse(Call<List<Comment>> call, Response<List<Comment>> response) {
-                Log.d(TAG, "获取的热门频道是：");
-                Log.d(TAG, response.body().toString());
-                //发通知
-                Message msg = new Message();
-                msg.what = MSG_HOT_COMMENT; //自己规定2，代表从阿里云获取频道。
-                msg.obj = response.body();
-                handler.sendMessage(msg);
+            public void onResponse(Call<Result<List<Comment>>> call, Response<Result<List<Comment>>> response) {
+                if (response.code() == 403) {
+                    Message msg = new Message();
+                    msg.what = MSG_NET_FAILURE;
+                    handler.sendMessage(msg);
+                } else if (null != response && null != response.body()) {
+                    Log.d(TAG, "获取的热门频道是：");
+                    Log.d(TAG, response.body().toString());
+                    //发通知
+                    Message msg = new Message();
+                    msg.what = MSG_HOT_COMMENT;
+                    msg.obj = response.body();
+                    handler.sendMessage(msg);
+                } else {
+                    Log.w(TAG, "response没有数据！");
+                }
             }
 
             @Override
-            public void onFailure(Call<List<Comment>> call, Throwable t) {
+            public void onFailure(Call<Result<List<Comment>>> call, Throwable t) {
                 Log.e(TAG, "访问网络失败了。。。", t);
                 Message msg = new Message();
                 msg.what = MSG_NET_FAILURE;
                 handler.sendMessage(msg);
             }
         });
+        return result;
     }
 
     /**

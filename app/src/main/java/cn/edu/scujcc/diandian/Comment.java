@@ -21,7 +21,7 @@ public class Comment {
     /**
      * 评论点赞数量
      */
-    private int star = 5;
+    private int star;
 
     public String getAuthor() {
         return author;

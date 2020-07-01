@@ -2,6 +2,7 @@ package cn.edu.scujcc.diandian;
 
 import com.squareup.moshi.Moshi;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 
@@ -13,18 +14,23 @@ import retrofit2.converter.moshi.MoshiConverterFactory;
  * 3.共有的方法返回该对象
  */
 public class RetrofitClient {
-    private static Retrofit retrofit = null;
+    private static Retrofit INSTANCE = null;
 
     public static Retrofit get() {
-        if (retrofit == null) {
+        if (INSTANCE == null) {
             Moshi moshi = new Moshi.Builder()
                     .add(new MyDate())
                     .build();
-            retrofit = new Retrofit.Builder()
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .addInterceptor(new AuthInterceptor())
+                    .build();
+
+            INSTANCE = new Retrofit.Builder()
                     .baseUrl("http://47.112.239.237:8080")   //访问自己的阿里云
                     .addConverterFactory(MoshiConverterFactory.create(moshi))
+                    .callFactory(client)
                     .build();
         }
-        return retrofit;
+        return INSTANCE;
     }
 }

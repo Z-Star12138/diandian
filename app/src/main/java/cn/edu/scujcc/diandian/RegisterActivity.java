@@ -46,7 +46,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         birthdayInput = findViewById(R.id.r_birthday);
-        registerButton = findViewById(R.id.register_button);
+        registerButton = findViewById(R.id.login_register_button);
         registerButton.setOnClickListener(v -> {
             register();
         });

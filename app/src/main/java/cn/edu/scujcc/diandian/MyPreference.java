@@ -27,13 +27,18 @@ public class MyPreference {
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    public void saveUser(String username) {
+    public void saveUser(String username, String token) {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(UserLab.USER_CURRENT, username);
+        editor.putString(UserLab.USER_TOKEN, token);
         editor.apply();
     }
 
     public String currentUser() {
         return prefs.getString(UserLab.USER_CURRENT, "未登录");
+    }
+
+    public String currentToken() {
+        return prefs.getString(UserLab.USER_TOKEN, "");
     }
 }

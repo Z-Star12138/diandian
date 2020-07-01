@@ -7,43 +7,46 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 
 public class LoginActivity extends AppCompatActivity {
+    private final static String TAG = "DianDian";
+    private String user;
+    private TextInputLayout username, password;
+    private Button loginButton, registerButton;
+    private UserLab lab = UserLab.getInstance();
+    private MyPreference prefs = MyPreference.getInstance();
     private final Handler handler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
             switch (msg.what) {
                 case UserLab.USER_LOGIN_SUCCESS:
-                    loginSuccess();
+                    loginSuccess(msg.obj);
                     break;
                 case UserLab.USER_LOGIN_FAIL:
                     loginFail();
                     break;
-                case UserLab.USER_PASSWORD_FAIL:
+                case UserLab.USER_LOGIN_PASSWORD_ERROR:
                     loginPasswordError();
                     break;
             }
         }
     };
-    private TextInputLayout username, password;
-    private Button loginButton, registerButton;
-    private UserLab lab = UserLab.getInstance();
-    private MyPreference prefs = MyPreference.getInstance();
 
-    private void loginSuccess() {
+    private void loginSuccess(Object token) {
         Toast.makeText(LoginActivity.this, "登录成功！欢迎！", Toast.LENGTH_LONG).show();
-        //FIXME  用Star来替换，从服务器获取成功的用户名
-        prefs.saveUser("Star");
+        prefs.saveUser(user, (String) token);
+        Log.d(TAG, "用户" + user + "登录成功，token＝" + token);
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
     }
 
     private void loginFail() {
-        Toast.makeText(LoginActivity.this, "登录失败！！！", Toast.LENGTH_LONG).show();
+        Toast.makeText(LoginActivity.this, "密码错误，登录失败！！！", Toast.LENGTH_LONG).show();
     }
 
     private void loginPasswordError() {
@@ -54,21 +57,24 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        prefs.setup(getApplicationContext());
 
-        username = findViewById(R.id.username);
-        password = findViewById(R.id.password);
+        username = findViewById(R.id.login_username);
+        password = findViewById(R.id.login_password);
         loginButton = findViewById(R.id.login_button);
+
         loginButton.setOnClickListener(v -> {
-            String u = username.getEditText().getText().toString();
+            user = username.getEditText().getText().toString();
             String p = password.getEditText().getText().toString();
-            lab.login(u, p, handler);
+            lab.login(user, p, handler);
         });
 
-        registerButton = findViewById(R.id.register_button);
+        registerButton = findViewById(R.id.login_register_button);
         registerButton.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);
         });
+
+        //系统全局获取MyPreference的Context
+        prefs.setup(getApplicationContext());
     }
 }

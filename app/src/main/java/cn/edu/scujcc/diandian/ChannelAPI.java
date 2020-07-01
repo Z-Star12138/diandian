@@ -10,7 +10,7 @@ import retrofit2.http.Path;
 
 public interface ChannelAPI {
     @GET("/channel")
-    Call<List<Channel>> getAllChannels();
+    Call<Result<List<Channel>>> getAllChannels();
 
     /**
      * 获取热门评论
@@ -19,7 +19,7 @@ public interface ChannelAPI {
      * @return
      */
     @GET("/channel/{channelId}/hotcomments")
-    Call<List<Comment>> getHotComments(@Path("channelId") String channelId);
+    Call<Result<List<Comment>>> getHotComments(@Path("channelId") String channelId);
 
     /**
      * 新增评论
@@ -31,14 +31,14 @@ public interface ChannelAPI {
     @POST("/channel/{channelId}/comment")
     Call<Channel> addComment(@Path("channelId") String ChannelId, @Body Comment c);
 
-    /**
-     * 登陆
-     *
-     * @param username 用户名
-     * @param password 密码
-     * @return
-     */
-    @GET("/user/login/{username}/{password}")
-    Call<Integer> login(@Path("username") String username, @Path("password") String password);
+//    /**
+//     * 登陆
+//     *
+//     * @param username 用户名
+//     * @param password 密码
+//     * @return
+//     */
+//    @GET("/user/login/{username}/{password}")
+//    Call<Integer> login(@Path("username") String username, @Path("password") String password);
 
 }

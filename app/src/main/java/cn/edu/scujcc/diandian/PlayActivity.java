@@ -36,7 +36,6 @@ public class PlayActivity extends AppCompatActivity {
     private Channel currentChannel;
     private List<Comment> hostComment;
     private ChannelLab lab = ChannelLab.getInstance();
-    private MyPreference prefs = MyPreference.getInstance();
     private final Handler handler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -95,8 +94,8 @@ public class PlayActivity extends AppCompatActivity {
         tvQuality.setText(currentChannel.getQuality());
 
         //读取当前用户
-        TextView currentUser = findViewById(R.id.current_user);
-        currentUser.setText(prefs.currentUser());
+//        TextView currentUser = findViewById(R.id.current_user);
+//        currentUser.setText(prefs.currentUser());
 
         if (hostComment != null && hostComment.size() > 0) {
             Comment c1 = hostComment.get(0);
